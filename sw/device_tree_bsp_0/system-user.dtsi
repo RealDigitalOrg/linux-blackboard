@@ -1,0 +1,144 @@
+/include/ "system-conf.dtsi"
+
+/ {
+	model = "Real Digital Blackboard";
+	compatible = "realdigital,blackboard", "xlnx,zynq-7000";
+
+	chosen {
+		bootargs = "console=ttyPS0,115200 console=tty0 consoleblank=0 root=/dev/mmcblk0p2 rw rootwait earlyprintk uio_pdrv_genirq.of_id=generic-uio";
+/*		bootargs = "console=ttyPS0,115200 earlyprintk uio_pdrv_genirq.of_id=generic-uio"; */
+	};
+
+	usb_phy0: usb_phy@0 {
+		compatible = "ulpi-phy";
+		#phy-cells = <0>;
+		reg = <0xe0002000 0x1000>;
+		view-port = <0x0170>;
+		drv-vbus;
+	};
+
+};
+
+&usb0 {	
+	usb-phy = <&usb_phy0>;
+	dr_mode = "host";
+};
+&sdhci0 {
+	u-boot,dm-pre-reloc;
+};
+&uart1 {
+	u-boot,dm-pre-reloc;
+};
+
+&qspi {
+	u-boot,dm-pre-reloc;
+};
+&flash0 {
+	compatible = "micron,m25p80", "s25fl128s", "spi-flash";
+};
+
+
+
+&amba_pl {
+	encoder_0: realdigital_encoder {
+		compatible = "realdigital,drm-encoder-hdmi";
+		realdigital,i2c-edid = <&i2c0>;
+		realdigital,max-pclock = <150000>;
+		realdigital,max-horz-res = <1920>;
+		realdigital,max-vert-res = <1080>;
+		realdigital,pref-horz-res = <1024>;
+		realdigital,pref-vert-res = <768>;
+	};
+
+	xilinx_drm {
+		compatible = "xlnx,drm";
+		xlnx,vtc = <&v_tc_0>;
+		xlnx,connector-type = "HDMIA";
+		xlnx,encoder-slave = <&encoder_0>;
+		clocks = <&clk_wiz_0 0>;
+		planes {
+			xlnx,pixel-format = "xrgb8888";
+			plane0 {
+				dmas = <&axi_vdma_0 0>;
+				dma-names = "dma0";
+			};
+		};
+	};
+};
+&axi_vdma_0 {
+	/* Added following line to deal with missing quotes */
+	clock-names = "s_axi_lite_aclk", "m_axi_mm2s_aclk", "m_axi_mm2s_aclk";
+	dma-ranges = <0x00000000 0x00000000 0x20000000>;
+};
+&v_tc_0 {
+	compatible = "xlnx,v-tc-5.01.a";
+};
+
+&axi_gpio_hdmi {
+	compatible = "generic-uio";	
+};
+
+
+&i2c1 {
+	lm75@48 {
+		compatible = "lm75";
+		reg = <0x48>;
+		status = "okay";
+	};
+};
+
+&gpio0 {
+	ngpios = <115>;
+	gpio-reserved-ranges = <0 16>, <19 4>, <28 22>, <52 1>;
+	gpio-line-names = "", "SPI_CS", "SPI_DQ0", "SPI_DQ1", "SPI_DQ2",
+	 "SPI_DQ3", "SPI_SCK", "", "", "", "ESP32_VSPI_MOSI", "ESP32_VSPI_MISO",
+	 "ESP32_VSPI_SCK", "ESP32_VSPI_CS", "ESP32_RXD0", "ESP32_TXD0",
+	 "LD8_B", "LD8_R", "LD8_G", "", "TEMP_SCL", "TEMP_SDA", "",
+	 "ESP32_GPIO25", "TEMP_OS", "ESP32_BOOT0", "ESP32_EN", "USB_OC",
+	 "USB_DATA4", "USB_DIR", "USB_STP", "USB_NXT", "USB_DATA0", "USB_DATA1",
+	 "USB_DATA2", "USB_DATA3", "USB_CLK", "USB_DATA5", "USB_DATA6",
+	 "USB_DATA7", "SD_CLK", "SD_CMD", "SD_D0", "SD_D1", "SD_D2", "SD_D3",
+	 "USB_RESETN", "SD_CD", "UART_RXD_OUT", "UART_TXD_IN", "BTN4", "BTN5",
+	 "", "ESP32_GPIO26",
+	 "BTN0", "BTN1", "BTN2", "BTN3",
+	 "SW0", "SW1", "SW2", "SW3", "SW4", "SW5", "SW6", "SW7",
+	 "JA1_P", "JA1_N", "JA2_P", "JA2_N", "JA3_P", "JA3_N", "JA4_P", "JA4_N",
+	 "JB1_P", "JB1_N", "JB2_P", "JB2_N", "JB3_P", "JB3_N", "JB4_P", "JB4_N",
+	 "JC1", "JC2", "JC3", "JC4", "JC7", "JC8", "JC9", "JC10",
+	 "SW8", "SW9", "SW10", "SW11",
+	 "ESP32_RXD1", "ESP32_TXD1",
+	 "LD1", "LD2", "LD3", "LD4", "LD5", "LD6", "LD7", "LD8", "LD9",
+	 "SERVO0", "SERVO1", "SERVO2", "SERVO3",
+	 "LD10_B", "LD10_G", "LD10_R", "LD11_B", "LD11_G", "LD11_R",
+	 "", "", "";
+};
+
+&adc {
+	xlnx,channels {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		channel@0 {
+			reg = <0>;
+		};
+	};
+};
+
+&clk_wiz_0 {
+	/* Override compatibility */
+	compatible = "realdigital,hdmi-clocking-wizard";
+	/* Added following line to deal with missing quotes */
+	clock-names = "clk_in1", "s_axi_aclk";
+	/* Set the speed grade */
+	speed-grade = <1>;
+};
+
+/*
+&axi_gpio_led {
+	compatible = "generic-uio";
+};
+
+
+&axi_gpio_sw_btn {
+	compatible = "generic-uio";
+};
+*/
