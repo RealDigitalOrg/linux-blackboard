@@ -90,7 +90,7 @@
 ## Build SD card
 
 1. Download the software image from:
-     http://realdigital.org/downloads/blackboard_18Feb2019a.img.gz.
+     <http://allterrainsw.com/wp-content/blackboard_18Feb2019a.img.gz>.
 2. Decompress the image file.  On Linux, you can use:
    - "gunzip blackboard_18Feb2019a.img.gz"
    You can use WinZip to decompress the file in Windows.
