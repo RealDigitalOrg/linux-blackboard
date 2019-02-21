@@ -108,6 +108,7 @@
    - devicetree.dtb
    - system.bit
    - rtlwifi.tar.gz (For USB Wi-Fi)
+
    These files have been pre-built and tested on a real board.  The "BOOT.bin",
    "uImage", "devicetree.dtb", and "system.bit" files should already be on the
    first partition after completing step 3 above.  These files are for
