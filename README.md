@@ -68,8 +68,8 @@
    cable connected as a minimum to test the board.
 2. Make sure jumper JP2 is set for "JTAG" and jumper JP3 is set to "EXTP" if
    using an external USB power supply connected to J13.  If only using the
-   USB connection to J10, select "USB" for JP3.  Turn on switch SW8.  If
-   power is active, LED LD12 will light up in red.
+   USB connection to J10, select "USB" for JP3.  Turn on switch SW80.  If
+   power is active, LED LD16 will light up in red.
 3. You should now run a terminal emulator, like Teraterm or minicom to connect
    to the serial port that has been assigned to the board.  Once connected,
    output from the tests will be displayed in the main window of the terminal
