@@ -75,9 +75,9 @@
    output from the tests will be displayed in the main window of the terminal
    emulator program.
 4. With the software projects built, the bit file can be downloaded to the
-   FPGA.  To do this, select "Xilinx Tools->Program FPGA" from the menu.
+   FPGA.  To do this, select "Xilinx->Program FPGA" from the menu.
    Then click the "Program" button in the "Program FPGA" dialog.  The green
-   LED, LD11, near the 7-segment display should light up when programming
+   LED, LD15, near the 7-segment display should light up when programming
    completes.
 5. The first test to try after programming the FPGA is the "memtest".
    Right click on "memtest" from the "Project Explorer" on the left side
@@ -85,7 +85,8 @@
    from the drop-down menu.  As an alternative, you can click on "memtest" to
    select it and then select "Run->Run As->Launch on Hardware (System Debugger)"
    from the main menu.  This will download the memory test application
-   to Blackboard and run it.  You should see all tests pass.
+   to Blackboard and run it.  Press "1" to run a short memory test.  You
+   should see all tests pass.
 6. You can also run the "hello" application in a similar manner as
    described for the memory test program.  The hello application runs
    from DDR3 memory whereas the memory test runs from FPGA SRAM.
