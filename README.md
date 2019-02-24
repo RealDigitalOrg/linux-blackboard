@@ -73,7 +73,8 @@
 3. You should now run a terminal emulator, like Teraterm or minicom to connect
    to the serial port that has been assigned to the board.  Once connected,
    output from the tests will be displayed in the main window of the terminal
-   emulator program.
+   emulator program.  For the port parameters, use 115200 baud, 8 bits, 1 stop
+   bit, no parity, and no flow control.
 4. With the software projects built, the bit file can be downloaded to the
    FPGA.  To do this, select "Xilinx->Program FPGA" from the menu.
    Then click the "Program" button in the "Program FPGA" dialog.  The green
