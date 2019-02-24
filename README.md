@@ -15,7 +15,7 @@
 
  - Vivado and XSDK 2017.4 loaded and operational.  Newer versions may work,
    but there may be some porting effort required.
- - Windows or Linux PC.  Building of the system has been tested on Linux.
+ - Windows or Linux PC.  A build of the system has been tested on Linux.
  - An 8 GByte, or larger, microSD FLASH card to boot Linux.  It is recommended
    one use a Class 10 microSD card or better.  The system has been tested with
    a Kingston microSD card, part number SDCIT/8GB.  A larger microSD card
@@ -44,20 +44,23 @@
 
 ## Load software
 
-1. When Xilinx SDK comes up, it will load in the exported files, which will
-   take less than a minute.
+1. After completing the Build hardware steps in the previous section, the
+   Xilinx SDK comes up and will load in the exported files, which takes less
+   than a minute.
 2. Once loaded, select "File->Import..." from the menu to load in the existing
-   projects.
+   software projects.
 3. From the Import dialog, select from the tree the
    "General->Existing Projects into Workspace" and click "Next".
 4. For the root directory, browse to the "sw" subdirectory.
-5. The Projects that will be loaded should already be checked.  Then click
+5. The Projects that will be imported should already be checked.  Then click
    "Finish" to import the projects.  The import and build will take about
    a minute or so to complete, but will likely result in a few errors.
-6. If errors occur, double-click on "bsp->system.mss" in the Project Explorer
-   tab on the left.  The "bsp Board Support Package" window will appear in
-   the middle secion.  Click on "Yes" when the confirmation dialog appears.
-   This should fix the errors encountered in step 5.
+6. If errors occur, expand the "bsp" item in the tree and then double-click
+   on "bsp->system.mss" in the Project Explorer tab on the left.  The
+   "bsp Board Support Package" window will appear in the middle section.
+   Click on the "Re-generate BSP Sources" button and then click on "Yes" when
+   the confirmation dialog appears.  This should fix the errors encountered
+   in step 5.
 
 ## Test the board
 
@@ -107,6 +110,7 @@
    - BOOT.bin
    - devicetree.dtb
    - system.bit
+   - uImage
    - rtlwifi.tar.gz (For USB Wi-Fi)
 
    These files have been pre-built and tested on a real board.  The "BOOT.bin",
@@ -122,40 +126,54 @@
    Test section above for setting up a terminal emulator.
 8. A USB hub with a keyboard and mouse can be plugged into J8 of the board
    To start an X windows session, type "startx" on the keyboard plugged
-   into the Blackboard board.  X-Windows should start up in about a minute.
+   into Blackboard.  X-Windows should start up in about a minute.
 
 ## Using Linux on Blackboard
 
-1. The partition size for the ext4 Linux partion is only about 4 GBytes in
+1. The partition size for the ext4 Linux partition is only about 4 GBytes in
    size.  To fully use the 8 GByte or bigger SD card, utilize the
    "build-swap.sh" script located in the "/root/Scripts" directory.  To
    increase the Linux partition size and create the swap file run the
    command "build-swap.sh -e" using a terminal from the "/root/scripts"
    directory.  The "-e" option tells the script to increase the Linux
-   partition to fill the rest of the space on the SD card.
+   partition to fill the rest of the available space on the SD card.
 2. To bring up networking, plug in a USB network dongle or Wi-Fi dongle.
-   For Wi-Fi, you will probably need to load some firmware files to the
-   /lib/firemware directory.  For Realek drivers, you already copied them
-   to the first partition of the SD card.  To move them to the /lib/firmware
-   directory, perform the following steps:
-   - Mount partion 1 by typing "mkdir /mnt/boot" and then "mount /mnt/boot".
+   We have had good success using an Apple USB to Ethernet dongle when using
+   a physical network connection.
+   For Wi-Fi, you will likely need to load some firmware files to the
+   /lib/firmware directory.  For Realtek drivers, you already copied the
+   firmware files to the first partition of the SD card in the Build SD card
+   step above.  To move them to the /lib/firmware directory, perform the
+   following steps:
+   - Mount partion 1 by typing "mount /dev/mmcblk0p1 /boot"
    - Then switch to the /lib/firmware directory by typing "cd /lib/firmware".
    - Now copy in the firmware files by typing
-       "tar xvzf /mnt/boot/rtlwifi.tar.gz ."
-   - Plug in the Wi-Fi dongle to the USB hub.
-   - From the X-Windows GUI, click on the "System Settings" icon located in
-     the toolbar to the left.  Then click on Network in the "System Settings"
-     window.
-   - Select Wireless on the left side, type in the SSID for your Network Name.
-   - In the next dialog select your network security, enter in the key, and
-     then click "Connect".
+       "tar xvzf /boot/rtlwifi.tar.gz ."
+3. If using a USB Wi-Fi dongle, use the following steps to configure
+   Linux for your Wi-Fi network:
+   - Plug in the Wi-Fi dongle to the powered USB hub.
+   - From the X-Windows GUI, click on "Preferences->Network Connections"
+     from the launch menu in the lower-left corner.
+   - Select "Add" on the upper-right side of the new dialog.  After clicking
+     "Add", wait for the next dialog window to pop up and select "Wi-Fi" for
+     the Connection Type.  Then click the "Create..." button.
+   - After the next dialog pops up, type in the SSID for your Network Name on
+     the "Wi-Fi" tab.
+   - In the "Wi-Fi Security" tab, select your Security type, enter in the
+     password, and then click "Save".  If you are unsure of what Security
+     type to select, you should select "WPA & WPA2 Personal" since that is
+     what most routers are configured for.
+   - After clicking "Save", a network connection should be established if
+     the Wi-Fi SSID and security have been entered correctly.
    We have used an Edimax EW-7811Un Wi-Fi dongle successfully using the above
    steps.
-5. With networking operational, you can update the Ubuntu software.  To do
+4. With networking operational, you can update the Ubuntu software.  To do
    the upgrade, use the following steps:
    - Type "apt update" to fetch the latest metadata for Ubuntu.
    - Type "apt upgrade" to perform the actual update to the various
      packages installed on the system.
+5. If you use the graphics login, note that the default password for the
+   blackboard and root users is "blackboard".
 
 ## Build new boot files
 
@@ -167,14 +185,14 @@ To build new boot files for the SD card, use the following steps:
    Then select "Xilinx->Create Boot Image" from the main menu.  This
    will display the "Create Boot Image" dialog.  Select the "Import from
    existing BIF file" radio button and then click the "Browse" button to
-   select the "fsbl.gif" file in the "sw/fsbl/bootimage" direcotry".  Then
+   select the "output.bif" file in the "sw/fsbl/bootimage" directory.  Then
    click on the "Create Image" button at the bottom.  Once complete, you can
    copy the "BOOT.bin" file from the "sw/fsbl/bootimage" subdirectory
    to the first partition of the SD card.
  - The device tree source files are generated when importing in the existing
    projects into XSDK.  The generated source files can be copied to the
    "/root/Src/dts" directory located on the Linux partition of the SD card.
-   One line needs to be added to the bottom of the system-top.dts file and
+   One line needs to be added to the bottom of the "system-top.dts" file and
    that line should be:
 
    ```
@@ -189,7 +207,7 @@ To build new boot files for the SD card, use the following steps:
    file can be copied from "/root/Src/dts" to the "/boot" directory on the SD
    card.  Make sure the "/dev/mmcblk0p1" partition on the SD card is mounted
    to the "/boot" directory prior to copying the "devicetree.dtb" file.
- - To recompile u-boot on Blackboard that is part of the "BOOT.bin" file,
+ - To recompile u-boot on Blackboard that is included in the "BOOT.bin" file,
    you will need to clone "u-boot-xlnx" from our git repository.  Once cloned
    on your local PC, you can use the following steps to build the u-boot elf
    file:
@@ -198,7 +216,7 @@ To build new boot files for the SD card, use the following steps:
    - "make zynq_blackboard_defconfig"
    - "make"
 
-   The second step will take a while to complete.  Alternatively, you can use
+   The "make" step will take a while to complete.  Alternatively, you can use
    the tools provided for XSDK to compile u-boot on Linux, which is much faster
    than compiling on Blackboard.  We use the following "build.sh" script to
    build u-boot on Linux:
@@ -210,19 +228,20 @@ To build new boot files for the SD card, use the following steps:
    export ARCH=arm
    export CROSS_COMPILE=arm-linux-gnueabihf-
    export UBOOTVERSION=2017.01-Blackboard
+   make zynq_blackboard_defconfig
    make UBOOTVERSION=$UBOOTVERSION
 
    ```
 
    Once built, you can copy the "u-boot" elf file in the "u-boot-xlnx"
-   directory to "sw/fsbl/Debug/u-boot.elf" in "linux-blackboard".  From
-   there, follow step 1 above to create a new "BOOT.bin" file.
+   directory to "sw/fsbl/Debug/u-boot.elf" in "linux-blackboard".  From there,
+   follow the first step in this section to create a new "BOOT.bin" file.
  - Compiling the Linux kernel is similar to u-boot.  You will first need to
    clone the linux-xlnx repository from RealDigitalOrg on github.com.  To do
    this, use the command
    "git clone https://github.com/RealDigitalOrg/linux-xlnx.git".  This will
    create the "linux-xlnx" directory.  Enter the "linux-xlnx" directory
-   and execture "git checkout real_digital -b real_digital" to load the files
+   and execute "git checkout real_digital -b real_digital" to load the files
    needed for Blackboard.  We then use the following script on a Linux system
    that has the Xilinx XSDK tools loaded:
 
@@ -233,7 +252,7 @@ To build new boot files for the SD card, use the following steps:
    #
    # make ARCH=arm menuconfig
    # or
-   # make ARCH=arm blackboard_defconfig
+   make ARCH=arm blackboard_defconfig
    ARCH=arm make -j 4 UIMAGE_LOADADDR=0x8000 uImage modules 2>&1 | tee build.log
    make modules_install INSTALL_MOD_PATH=`pwd`/rootfs ARCH=arm 2>&1 | tee modules_install.log
    make headers_install INSTALL_HDR_PATH=`pwd`/rootfs/usr/ ARCH=arm 2>&1 | tee headers_install.log
@@ -241,3 +260,18 @@ To build new boot files for the SD card, use the following steps:
    find rootfs/usr/include -name "..install.cmd" -delete
 
    ```
+
+   Once the build has completed, you can copy the uImage file located in the
+   arch/arm/boot subdirectory to the /boot partition.  The loadable modules
+   for the new kernel are located in the rootfs/lib/modules subdirectory and
+   must be placed in the lib/modules subdirectory.  The linux headers are in
+   the rootfs/usr/include subdirectory and can be placed in the /usr/include
+   subdirectory.
+
+   It is recommended that the cross-compiler installed with XSDK 2017.4 be
+   used to perform the build of the Linux kernel since it typically takes less
+   than an hour to complete.  The kernel can also be built on Blackboard
+   using the above instructions, but it will take about 14 to 16 hours to
+   complete.  If you do decide to use Blackboard to compile the kernel, make
+   sure there is at least a 16 GB SD card installed with 4 GBytes of free
+   space.
