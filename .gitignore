@@ -1,7 +1,13 @@
 # Files to ignore
+hw/hw.*
 sw/drivers
 sw/hw_1_wrapper.hdf
+sw/.metadata
+sw/RemoteSystemsTempFiles
+sw/webtalk
 *.o
 *.d
 *.tar.gz
 *.bit
+*.jou
+*.log
