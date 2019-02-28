@@ -3,7 +3,8 @@
 ### Document sections
 
  - Requirements
- - Download software
+ - Download design
+ - Install board files
  - Build hardware
  - Load software
  - Test the board
@@ -22,9 +23,28 @@
    is recommended to load additional Ubuntu packages.
  - Edimax EW-7811Un Wi-Fi dongle or Apple USB to Ethernet dongle for networking.
 
-## Download software
+## Download design
 
  - Use "git clone" to copy the git repository from github to a local machine.
+
+## Install board files
+ - The Vivado "board.repoPaths" parameter must be set to the path of the
+   "board_files" directory.  You can edit the Vivado_init.tcl startup script
+   and add the line shown below.  If the script does not exist, create it in
+   the ~/.Xilinx/Vivado directory.
+
+   ```
+   set_param board.repoPaths [list "<path to board_files>"]
+   ```
+
+   Substitute in the real path for <path_to_board_files> above.  When you run
+   Vivado, the Vivado_int.tcl script will be executed.
+
+   The location of the Vivado_init.tcl file for Linux and Windows is:
+   - Linux: From your home directory, in the ".Xilinx/Vivado" subdirectory
+   - Windows: From your home directory, in the "AppData\Xilinx\Vivado"
+     subdirectory.  The path to "AppData" is in the environment variable
+     "APPDATA".
 
 ## Build hardware
 
