@@ -114,19 +114,24 @@
 
 ## Build SD card
 
-1. Download the software image from:
+1. Download the Ubuntu 16.04 LTS software image from:
      <http://allterrainsw.com/wp-content/blackboard_18Feb2019a.img.gz>.
-2. Decompress the image file.  On Linux, you can use:
-   - "gunzip blackboard_18Feb2019a.img.gz"
+     Alternatively, download the Ubuntu 18.04 LTS software image from:
+     <http://allterrainsw.com/wp-content/blackboard_15Aug2020a.img.gz>.
+     
+2. Decompress the image file.  On Linux, you can use either:
+   - "gunzip blackboard_18Feb2019a.img.gz" for the Ubuntu 16.04 image.
+   - "gunzip blackboard_15Aug2020a.img.gz" for the Ubuntu 18.04 image.
    You can use WinZip to decompress the file in Windows.
 3. The image needs to be burned onto the SD card.  For Linux you can use:
    - "dd if=blackboard_18Feb2019a.img of=/dev/sdX bs=512" where the X in
      sdX is replaced with the actual disk that represents the SD card.
-   For Windows you can use imageUSB by PassMark Software.
-   - Select the drive in "Step 1".
-   - Select "Write image to USB drive" in "Step 2".
-   - Browse to "blackboard_18Feb2019a.img" in "Step 3".
-   - Then click the "Write" button.
+     - Substitute in blackboard_15Aug2020a.img above for the Ubuntu 18.04 LTS image.
+   - For Windows you can use imageUSB by PassMark Software.
+     - Select the drive in "Step 1".
+     - Select "Write image to USB drive" in "Step 2".
+     - Browse to "blackboard_18Feb2019a.img" or "blackboard_15Aug2020a.img" in "Step 3" of the PassMark software.
+     - Then click the "Write" button.
 4. Copy the following files from the "bootfiles" subdirectory to the
    first partition on the SD FLASH card, if needed:
    - BOOT.bin
@@ -135,10 +140,10 @@
    - uImage
    - rtlwifi.tar.gz (For USB Wi-Fi)
 
-   These files have been pre-built and tested on a real board.  The "BOOT.bin",
-   "uImage", "devicetree.dtb", and "system.bit" files should already be on the
-   first partition after completing step 3 above.  These files are for
-   Blackboard Rev. D.
+   These files have been pre-built and tested on a real board for both versions
+   of Ubuntu.  The "BOOT.bin", "uImage", "devicetree.dtb", and "system.bit"
+   files should already be on the first partition after completing step 3 above.
+   These files are for Blackboard Rev. D.
 5. Unmount (Linux) or eject (Windows) the SD card from the PC and then insert
    it into the "SD MICRO" slot on Blackboard.
 6. To boot Linux, make sure JP2 is set to "SD" and connect an external USB
@@ -159,6 +164,7 @@
    command "build-swap.sh -e" using a terminal from the "/root/scripts"
    directory.  The "-e" option tells the script to increase the Linux
    partition to fill the rest of the available space on the SD card.
+   
 2. To bring up networking, plug in a USB network dongle or Wi-Fi dongle.
    We have had good success using an Apple USB to Ethernet dongle when using
    a physical network connection.
@@ -176,6 +182,12 @@
    - Plug in the Wi-Fi dongle to the powered USB hub.
    - From the X-Windows GUI, click on "Preferences->Network Connections"
      from the launch menu in the lower-left corner.
+     - For Ubuntu 18.04 LTS, you can click on the network icon in the system
+       tray located on the lower-right section of the screen.  Select from
+       the list of available wireless networks that should pop up.  A prompt
+       should appear after selecting a network that asks for the passphrase.
+       When using this process, the remaining steps listed below can be
+       skipped.
    - Select "Add" on the upper-right side of the new dialog.  After clicking
      "Add", wait for the next dialog window to pop up and select "Wi-Fi" for
      the Connection Type.  Then click the "Create..." button.
@@ -194,8 +206,11 @@
    - Type "apt update" to fetch the latest metadata for Ubuntu.
    - Type "apt upgrade" to perform the actual update to the various
      packages installed on the system.
-5. If you use the graphics login, note that the default password for the
-   blackboard and root users is "blackboard".
+5. If you use the graphics login or the terminal login with Ubuntu 18.04 LTS,
+   the default password for the blackboard user is "blackboard".  On Ubuntu
+   16.04 LTS, the default password for root is also "blackboard".  There is no
+   assigned root password on Ubuntu 18.04 LTS, but "sudo" will provide access
+   to root for the blackboard user.
 
 ## Build new boot files
 
@@ -221,7 +236,7 @@ To build new boot files for the SD card, use the following steps:
    /include/ "system-user.dtsi"
    ```
 
-   Note that the device tree sources files will not change unless the
+   Note that the device tree source files will not change unless the
    hardware configuration changes.
 
    To regenerate the "devicetree.dtb" file, run the "build-devicetree.sh"
