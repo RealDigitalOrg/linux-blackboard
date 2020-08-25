@@ -117,7 +117,7 @@
 1. Download the Ubuntu 16.04 LTS software image from:
      <http://allterrainsw.com/wp-content/blackboard_18Feb2019a.img.gz>.
      Alternatively, download the Ubuntu 18.04 LTS software image from:
-     <http://allterrainsw.com/wp-content/blackboard_15Aug2020b.img.gz>.
+     <http://allterrainsw.com/wp-content/blackboard_24Aug2020.img.gz>.
      
 2. Decompress the image file.  On Linux, you can use either:
    - "gunzip blackboard_18Feb2019a.img.gz" for the Ubuntu 16.04 image.
