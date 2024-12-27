@@ -115,9 +115,9 @@
 ## Build SD card
 
 1. Download the Ubuntu 16.04 LTS software image from:
-     [blackboard_18Feb2019a.img.gz](https://1drv.ms/u/s!AiQ7D3y8DClQgqssFjVkvAr6kf-r8w?e=zxJaQQ)
+     [blackboard_18Feb2019a.img.gz](https://1drv.ms/u/s!AiQ7D3y8DClQgqssFjVkvAr6kf-r8w?e=zxJaQQ).
      Alternatively, download the Ubuntu 18.04 LTS software image from:
-     [blackboard_24Aug2020.img.gz](https://1drv.ms/u/s!AiQ7D3y8DClQgqstBYZujJHxX7_0yg?e=VZ8P2v)
+     [blackboard_24Aug2020.img.gz](https://1drv.ms/u/s!AiQ7D3y8DClQgqstBYZujJHxX7_0yg?e=VZ8P2v).
      
 2. Decompress the image file.  On Linux, you can use either:
    - "gunzip blackboard_18Feb2019a.img.gz" for the Ubuntu 16.04 image.
